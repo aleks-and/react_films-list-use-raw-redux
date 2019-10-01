@@ -6,7 +6,7 @@ import { store } from '../../store/index';
 
 export class FilmsList extends React.Component {
   state = {
-    films: [],
+    films: store.getState().films,
   }
 
   unsubscribe = null;
