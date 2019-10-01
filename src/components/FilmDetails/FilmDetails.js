@@ -1,22 +1,39 @@
 /* eslint-disable max-len */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { store } from '../../store';
 
 export class FilmDetails extends Component {
+  state = {
+    film: store.getState().films.find(film => String(film.id) === this.props.match.params.id),
+  }
+
+  unsubscribe = null
+
+  componentDidMount() {
+    const { match } = this.props;
+
+    this.unsubscribe = store
+      .subscribe(() => {
+        this.setState({
+          film: store.getState().films.find(film => String(film.id) === match.params.id),
+        });
+      });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
   render() {
-    const {
-      title,
-      description,
-      imgUrl,
-      imdbUrl,
-    } = this.props;
+    const { film } = this.state;
 
     return (
       <div className="card">
         <div className="card-image">
           <figure className="image is-4by3">
             <img
-              src={imgUrl}
+              src={film.imgUrl}
               alt="Film logo"
             />
           </figure>
@@ -32,14 +49,14 @@ export class FilmDetails extends Component {
               </figure>
             </div>
             <div className="media-content">
-              <p className="title is-4">{title}</p>
+              <p className="title is-4">{film.title}</p>
             </div>
           </div>
 
           <div className="content">
-            {description}
+            {film.description}
             <br />
-            <a href={imdbUrl}>IMDB</a>
+            <a href={film.imdbUrl}>IMDB</a>
           </div>
         </div>
       </div>
@@ -48,12 +65,9 @@ export class FilmDetails extends Component {
 }
 
 FilmDetails.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string,
-  imgUrl: PropTypes.string.isRequired,
-  imdbUrl: PropTypes.string.isRequired,
-};
-
-FilmDetails.defaultProps = {
-  description: '',
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }).isRequired,
 };
