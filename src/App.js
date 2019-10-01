@@ -9,13 +9,12 @@ import { FilmsList } from './components/FilmsList/FilmsList';
 import { NewFilm } from './components/NewFilm';
 import { FormField } from './components/FormField';
 import { FilmDetails } from './components/FilmDetails';
-import { store, addNewFilm } from './store/index';
+import { store, addNewFilm, findNewFilm } from './store';
 
 const API_URL = 'http://www.omdbapi.com/?apikey=2f4a38c9&t=';
 
 export class App extends Component {
   state = {
-    filmsList: store.getState().films,
     searchWord: '',
   };
 
@@ -31,7 +30,9 @@ export class App extends Component {
     this.setState({ searchWord: target.value });
   };
 
-  searchFilm = (searchWord) => {
+  searchFilm = () => {
+    const { searchWord } = this.state;
+
     fetch(`${API_URL}${searchWord}`)
       .then(response => response.json())
       .then((data) => {
@@ -50,10 +51,7 @@ export class App extends Component {
           imgUrl: Poster,
           imdbUrl: Website,
         };
-
-        this.setState(prevState => ({
-          filmsList: [...prevState.filmsList, newFilm],
-        }));
+        store.dispatch(findNewFilm(newFilm));
       });
   };
 
@@ -73,7 +71,7 @@ export class App extends Component {
                 onChange={this.handleSearchChange}
               />
               <button
-                onClick={() => this.searchFilm(searchWord)}
+                onClick={this.searchFilm}
                 type="button"
                 className="button is-primary"
               >
@@ -85,9 +83,7 @@ export class App extends Component {
               <Route
                 exact
                 path="/"
-                render={() => (
-                  <FilmsList />
-                )}
+                component={FilmsList}
               />
               <Route
                 exact

@@ -11,18 +11,21 @@ export class FilmDetails extends Component {
   unsubscribe = null
 
   componentDidMount() {
-    const { match } = this.props;
-
     this.unsubscribe = store
       .subscribe(() => {
         this.setState({
-          film: store.getState().films.find(film => String(film.id) === match.params.id),
+          film: this.findFilm,
         });
       });
   }
 
   componentWillUnmount() {
     this.unsubscribe();
+  }
+
+  findFilm() {
+    const { match } = this.props;
+    store.getState().films.find(film => String(film.id) === match.params.id);
   }
 
   render() {
