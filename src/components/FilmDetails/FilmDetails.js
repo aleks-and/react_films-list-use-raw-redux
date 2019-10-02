@@ -5,7 +5,7 @@ import { store } from '../../store';
 
 export class FilmDetails extends Component {
   state = {
-    film: store.getState().films.find(film => String(film.id) === this.props.match.params.id),
+    film: this.findFilm(),
   }
 
   unsubscribe = null
@@ -14,7 +14,7 @@ export class FilmDetails extends Component {
     this.unsubscribe = store
       .subscribe(() => {
         this.setState({
-          film: this.findFilm,
+          film: this.findFilm(),
         });
       });
   }
@@ -25,7 +25,8 @@ export class FilmDetails extends Component {
 
   findFilm() {
     const { match } = this.props;
-    store.getState().films.find(film => String(film.id) === match.params.id);
+    return store.getState().films
+      .find(film => String(film.id) === match.params.id);
   }
 
   render() {

@@ -9,7 +9,7 @@ import { FilmsList } from './components/FilmsList/FilmsList';
 import { NewFilm } from './components/NewFilm';
 import { FormField } from './components/FormField';
 import { FilmDetails } from './components/FilmDetails';
-import { store, addNewFilm, findNewFilm } from './store';
+import { store, addNewFilm } from './store';
 
 const API_URL = 'http://www.omdbapi.com/?apikey=2f4a38c9&t=';
 
@@ -51,7 +51,7 @@ export class App extends Component {
           imgUrl: Poster,
           imdbUrl: Website,
         };
-        store.dispatch(findNewFilm(newFilm));
+        store.dispatch(addNewFilm(newFilm));
       });
   };
 
