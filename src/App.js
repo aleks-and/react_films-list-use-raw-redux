@@ -58,7 +58,7 @@ export class App extends Component {
     const { searchWord } = this.state;
 
     return (
-      <BrowserRouter>
+      <BrowserRouter basename="/react_films-list-use-raw-redux">
         <div className="page">
           <div className="content">
             <div className="box">
